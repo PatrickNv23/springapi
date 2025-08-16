@@ -1,5 +1,7 @@
 package com.panvdev.springapi.features.guitar.services;
 
+import com.panvdev.springapi.core.error_handling.Result;
+import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.features.guitar.domains.Guitar;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
@@ -18,32 +20,38 @@ public class GuitarServiceImpl implements GuitarService {
 
 
     @Override
-    public List<GuitarDto> findAll() {
-        return guitarRepository.findAll()
-                .stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+    public Result<List<GuitarDto>> findAll() {
+        return Result.success(
+                guitarRepository.findAll()
+                    .stream()
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList())
+        );
     }
 
     @Override
-    public GuitarDto save(GuitarDto guitarDto) {
+    public Result<GuitarDto> save(GuitarDto guitarDto) {
         Guitar guitar = mapToEntity(guitarDto);
         Guitar savedGuitar = guitarRepository.save(guitar);
-        return mapToDto(savedGuitar);
+        return Result.success(mapToDto(savedGuitar));
     }
 
     @Override
-    public GuitarDto findById(UUID id) {
-        return guitarRepository.findById(id)
-                .map(this::mapToDto)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    public Result<GuitarDto> findById(UUID id) {
+        return Result.success(
+                guitarRepository.findById(id)
+                    .map(this::mapToDto)
+                    .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id))
+        );
     }
 
     @Override
-    public void delete(UUID id) {
+    public Result<GuitarDto> delete(UUID id) {
         Guitar guitar = guitarRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id));
+        GuitarDto guitarDto = mapToDto(guitar);
         guitarRepository.delete(guitar);
+        return Result.success(guitarDto);
     }
 
     private GuitarDto mapToDto(Guitar guitar){

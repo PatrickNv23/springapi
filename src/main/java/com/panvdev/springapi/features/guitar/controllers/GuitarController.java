@@ -1,7 +1,9 @@
 package com.panvdev.springapi.features.guitar.controllers;
 
+import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import com.panvdev.springapi.features.guitar.services.GuitarService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +18,22 @@ public class GuitarController {
     private GuitarService guitarService;
 
     @GetMapping
-    public ResponseEntity<List<GuitarDto>> findAll() {
+    public ResponseEntity<Result<List<GuitarDto>>> findAll() {
         return ResponseEntity.ok(guitarService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<GuitarDto> save(@RequestBody GuitarDto guitarDto) {
+    public ResponseEntity<Result<GuitarDto>> save(@RequestBody GuitarDto guitarDto) {
         return ResponseEntity.ok(guitarService.save(guitarDto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GuitarDto> findById(@PathVariable UUID id) {
+    public ResponseEntity<Result<GuitarDto>> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(guitarService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        guitarService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Result<GuitarDto>> delete(@PathVariable UUID id) {
+        return ResponseEntity.ok(guitarService.delete(id));
     }
 }

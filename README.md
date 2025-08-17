@@ -1,4 +1,4 @@
-# 🎸 SpringAPI
+# ‍💻 SpringAPI
 
 SpringAPI is a learning project built with **Spring Boot** that simulates a microservices-style API but in a **monolithic setup for simplicity**.  
 It covers **authentication, authorization, customer management, email verification, password reset, file upload, payments and CRUD operations**, while applying best practices in **Spring Security, JPA, and Clean Architecture principles**.

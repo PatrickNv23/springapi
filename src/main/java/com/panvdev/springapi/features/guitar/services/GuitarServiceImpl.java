@@ -4,6 +4,7 @@ import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.features.guitar.domains.Guitar;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
+import com.panvdev.springapi.features.guitar.mappers.GuitarMapper;
 import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class GuitarServiceImpl implements GuitarService {
 
     @Autowired
     private GuitarRepository guitarRepository;
+    @Autowired
+    private GuitarMapper guitarMapper;
 
 
     @Override
@@ -24,23 +27,22 @@ public class GuitarServiceImpl implements GuitarService {
         return Result.success(
                 guitarRepository.findAll()
                     .stream()
-                    .map(this::mapToDto)
+                    .map(guitarMapper::toDto)
                     .collect(Collectors.toList())
         );
     }
 
     @Override
     public Result<GuitarDto> save(GuitarDto guitarDto) {
-        Guitar guitar = mapToEntity(guitarDto);
-        Guitar savedGuitar = guitarRepository.save(guitar);
-        return Result.success(mapToDto(savedGuitar));
+        Guitar savedGuitar = guitarRepository.save(guitarMapper.toEntity(guitarDto));
+        return Result.success(guitarMapper.toDto(savedGuitar));
     }
 
     @Override
     public Result<GuitarDto> findById(UUID id) {
         return Result.success(
                 guitarRepository.findById(id)
-                    .map(this::mapToDto)
+                    .map(guitarMapper::toDto)
                     .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id))
         );
     }
@@ -49,26 +51,8 @@ public class GuitarServiceImpl implements GuitarService {
     public Result<GuitarDto> delete(UUID id) {
         Guitar guitar = guitarRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id));
-        GuitarDto guitarDto = mapToDto(guitar);
+        GuitarDto guitarDto = guitarMapper.toDto(guitar);
         guitarRepository.delete(guitar);
         return Result.success(guitarDto);
-    }
-
-    private GuitarDto mapToDto(Guitar guitar){
-        return GuitarDto.builder()
-                .id(guitar.getId())
-                .model(guitar.getModel())
-                .brand(guitar.getBrand())
-                .price(guitar.getPrice())
-                .build();
-    }
-
-    private Guitar mapToEntity(GuitarDto guitarDto){
-        return Guitar.builder()
-                .id(guitarDto.getId())
-                .model(guitarDto.getModel())
-                .brand(guitarDto.getBrand())
-                .price(guitarDto.getPrice())
-                .build();
     }
 }

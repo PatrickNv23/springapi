@@ -3,7 +3,7 @@ package com.panvdev.springapi.features.guitar.controllers;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import com.panvdev.springapi.features.guitar.services.GuitarService;
-import org.apache.coyote.Response;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class GuitarController {
     }
 
     @PostMapping
-    public ResponseEntity<Result<GuitarDto>> save(@RequestBody GuitarDto guitarDto) {
+    public ResponseEntity<Result<GuitarDto>> save(@Valid @RequestBody GuitarDto guitarDto) {
         return ResponseEntity.ok(guitarService.save(guitarDto));
     }
 

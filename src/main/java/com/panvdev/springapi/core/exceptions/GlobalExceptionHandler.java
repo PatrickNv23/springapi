@@ -4,8 +4,11 @@ import com.panvdev.springapi.core.error_handling.ApiError;
 import com.panvdev.springapi.core.error_handling.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -32,5 +35,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Result.failure(error));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Result<?>> handleMethodArgumentNotValid(MethodArgumentNotValidException exception){
+        List<ApiError> validationErrors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> new ApiError(error.getField(), error.getDefaultMessage()))
+                .toList();
+
+        return ResponseEntity
+                .badRequest()
+                .body(Result.failure(validationErrors.toArray(ApiError[]::new)));
     }
 }

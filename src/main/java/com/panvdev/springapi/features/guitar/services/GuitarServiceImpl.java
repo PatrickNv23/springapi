@@ -1,5 +1,6 @@
 package com.panvdev.springapi.features.guitar.services;
 
+import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.features.guitar.domains.Guitar;
@@ -7,6 +8,10 @@ import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import com.panvdev.springapi.features.guitar.mappers.GuitarMapper;
 import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,5 +59,16 @@ public class GuitarServiceImpl implements GuitarService {
         GuitarDto guitarDto = guitarMapper.toDto(guitar);
         guitarRepository.delete(guitar);
         return Result.success(guitarDto);
+    }
+
+    @Override
+    public Result<Page<GuitarDto>> findAllByPageAndSorting(PageableAndSortingRequest request) {
+        Sort sort = request.isAscending()
+                ? Sort.by(request.getSortBy()).ascending()
+                : Sort.by(request.getSortBy()).descending();
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
+        Page<GuitarDto> resultPage = guitarRepository.findAll(pageable)
+                .map(guitarMapper::toDto);
+        return Result.success(resultPage);
     }
 }

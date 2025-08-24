@@ -1,10 +1,12 @@
 package com.panvdev.springapi.features.guitar.controllers;
 
+import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import com.panvdev.springapi.features.guitar.services.GuitarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +37,10 @@ public class GuitarController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Result<GuitarDto>> delete(@PathVariable UUID id) {
         return ResponseEntity.ok(guitarService.delete(id));
+    }
+
+    @GetMapping("byPageAndSorting")
+    public ResponseEntity<Result<Page<GuitarDto>>> findAllByPageAndSorting(@ModelAttribute PageableAndSortingRequest request){
+        return ResponseEntity.ok(guitarService.findAllByPageAndSorting(request));
     }
 }

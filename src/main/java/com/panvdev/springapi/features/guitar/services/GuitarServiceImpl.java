@@ -4,9 +4,12 @@ import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.features.guitar.domains.Guitar;
+import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarDto;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
+import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
 import com.panvdev.springapi.features.guitar.mappers.GuitarMapper;
 import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
+import com.panvdev.springapi.features.guitar.specifications.GuitarSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -70,5 +73,35 @@ public class GuitarServiceImpl implements GuitarService {
         Page<GuitarDto> resultPage = guitarRepository.findAll(pageable)
                 .map(guitarMapper::toDto);
         return Result.success(resultPage);
+    }
+
+    @Override
+    public Result<List<GuitarDto>> findByBrand(String brand) {
+        return Result.success(
+                guitarRepository.findByBrand(brand)
+                        .stream()
+                        .map(guitarMapper::toDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public Result<List<GuitarDto>> findByBrandAndModel(FilterByBrandAndModelGuitarDto filters) {
+        return Result.success(
+                guitarRepository.findByBrandAndModel(filters.brand(), filters.model())
+                        .stream()
+                        .map(guitarMapper::toDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public Result<List<GuitarDto>> findByFilters(GuitarFiltersDto filters) {
+        return Result.success(
+                guitarRepository.findAll(GuitarSpecification.withFilters(filters))
+                        .stream()
+                        .map(guitarMapper::toDto)
+                        .toList()
+        );
     }
 }

@@ -2,7 +2,9 @@ package com.panvdev.springapi.features.guitar.services;
 
 import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
+import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarDto;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
+import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,4 +16,7 @@ public interface GuitarService {
     Result<GuitarDto> findById(UUID id);
     Result<GuitarDto> delete(UUID id);
     Result<Page<GuitarDto>> findAllByPageAndSorting(PageableAndSortingRequest request);
+    Result<List<GuitarDto>> findByBrand(String brand);
+    Result<List<GuitarDto>> findByBrandAndModel(FilterByBrandAndModelGuitarDto filters);
+    Result<List<GuitarDto>> findByFilters(GuitarFiltersDto filters);
 }

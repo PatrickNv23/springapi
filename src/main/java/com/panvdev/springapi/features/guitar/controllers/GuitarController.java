@@ -2,7 +2,9 @@ package com.panvdev.springapi.features.guitar.controllers;
 
 import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
+import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarDto;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
+import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
 import com.panvdev.springapi.features.guitar.services.GuitarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,22 @@ public class GuitarController {
     }
 
     @GetMapping("byPageAndSorting")
-    public ResponseEntity<Result<Page<GuitarDto>>> findAllByPageAndSorting(@ModelAttribute PageableAndSortingRequest request){
+    public ResponseEntity<Result<Page<GuitarDto>>> findAllByPageAndSorting(@Valid @ModelAttribute PageableAndSortingRequest request){
         return ResponseEntity.ok(guitarService.findAllByPageAndSorting(request));
+    }
+
+    @GetMapping("byBrand")
+    public ResponseEntity<Result<List<GuitarDto>>> findByBrand(@RequestParam String brand){
+        return ResponseEntity.ok(guitarService.findByBrand(brand));
+    }
+
+    @GetMapping("byBrandAndModel")
+    public ResponseEntity<Result<List<GuitarDto>>> findByBrandAndModel(FilterByBrandAndModelGuitarDto filters){
+        return ResponseEntity.ok(guitarService.findByBrandAndModel(filters));
+    }
+
+    @GetMapping("byFilters")
+    public ResponseEntity<Result<List<GuitarDto>>> findByFilters(@Valid GuitarFiltersDto filters){
+        return ResponseEntity.ok(guitarService.findByFilters(filters));
     }
 }

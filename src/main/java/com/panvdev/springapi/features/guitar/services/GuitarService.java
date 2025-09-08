@@ -19,4 +19,6 @@ public interface GuitarService {
     Result<List<GuitarDto>> findByBrand(String brand);
     Result<List<GuitarDto>> findByBrandAndModel(FilterByBrandAndModelGuitarDto filters);
     Result<List<GuitarDto>> findByFilters(GuitarFiltersDto filters);
+    Result<List<GuitarDto>> findByCategoryId(UUID categoryId);
+    Result<List<GuitarDto>> findByCategoryName(String categoryName);
 }

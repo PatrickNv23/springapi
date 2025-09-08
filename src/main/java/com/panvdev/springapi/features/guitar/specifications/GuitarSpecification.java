@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GuitarSpecification {
     public static Specification<Guitar> withFilters(GuitarFiltersDto filters){
-        return (root, query, cb) -> {
+        return (root, _, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             // filter by Brand

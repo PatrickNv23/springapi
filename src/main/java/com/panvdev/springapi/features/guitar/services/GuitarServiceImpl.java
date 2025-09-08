@@ -104,4 +104,22 @@ public class GuitarServiceImpl implements GuitarService {
                         .toList()
         );
     }
+
+    @Override
+    public Result<List<GuitarDto>> findByCategoryId(UUID categoryId) {
+        return Result.success(
+                guitarRepository.findByCategoryId(categoryId).stream()
+                        .map(guitarMapper::toDto)
+                        .toList()
+        );
+    }
+
+    @Override
+    public Result<List<GuitarDto>> findByCategoryName(String categoryName) {
+        return Result.success(
+                guitarRepository.findByCategoryName(categoryName).stream()
+                        .map(guitarMapper::toDto)
+                        .toList()
+        );
+    }
 }

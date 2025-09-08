@@ -60,4 +60,14 @@ public class GuitarController {
     public ResponseEntity<Result<List<GuitarDto>>> findByFilters(@Valid GuitarFiltersDto filters){
         return ResponseEntity.ok(guitarService.findByFilters(filters));
     }
+
+    @GetMapping("byCategory/{categoryId}")
+    public ResponseEntity<Result<List<GuitarDto>>> findByCategoryId(@PathVariable UUID categoryId){
+        return ResponseEntity.ok(guitarService.findByCategoryId(categoryId));
+    }
+
+    @GetMapping("byCategoryName")
+    public ResponseEntity<Result<List<GuitarDto>>> findByCategoryId(@RequestParam String categoryName){
+        return ResponseEntity.ok(guitarService.findByCategoryName(categoryName));
+    }
 }

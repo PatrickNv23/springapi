@@ -21,6 +21,7 @@ public class Guitar {
     private String model;
     private String brand;
     private Double price;
+    private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)

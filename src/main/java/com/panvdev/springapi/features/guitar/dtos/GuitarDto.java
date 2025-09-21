@@ -23,4 +23,6 @@ public class GuitarDto {
     @Positive(message = "The price field must be positive")
     @Min(value = 500, message = "The price field should not be less than 500")
     private Double price;
+
+    private String image;
 }

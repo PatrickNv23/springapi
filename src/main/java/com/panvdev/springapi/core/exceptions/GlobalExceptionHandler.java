@@ -2,6 +2,7 @@ package com.panvdev.springapi.core.exceptions;
 
 import com.panvdev.springapi.core.error_handling.ApiError;
 import com.panvdev.springapi.core.error_handling.Result;
+import com.panvdev.springapi.core.storage.StorageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -48,5 +49,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(Result.failure(validationErrors.toArray(ApiError[]::new)));
+    }
+
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<Result<?>> handleStorage(StorageException exception){
+        ApiError error = new ApiError("STORAGE_ERROR", exception.getMessage());
+        return ResponseEntity
+                .badRequest()
+                .body(Result.failure(error));
     }
 }

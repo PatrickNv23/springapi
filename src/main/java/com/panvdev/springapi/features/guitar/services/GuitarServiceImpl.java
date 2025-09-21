@@ -3,6 +3,7 @@ package com.panvdev.springapi.features.guitar.services;
 import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
+import com.panvdev.springapi.core.storage.FileStorageService;
 import com.panvdev.springapi.features.guitar.domains.Guitar;
 import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarDto;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
@@ -11,11 +12,13 @@ import com.panvdev.springapi.features.guitar.mappers.GuitarMapper;
 import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
 import com.panvdev.springapi.features.guitar.specifications.GuitarSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +31,8 @@ public class GuitarServiceImpl implements GuitarService {
     private GuitarRepository guitarRepository;
     @Autowired
     private GuitarMapper guitarMapper;
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
     @Override
@@ -121,5 +126,32 @@ public class GuitarServiceImpl implements GuitarService {
                         .map(guitarMapper::toDto)
                         .toList()
         );
+    }
+
+    @Override
+    public Result<GuitarDto> updateImage(UUID id, MultipartFile file) {
+        Guitar guitar = guitarRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id));
+
+        if(guitar.getImage() != null && !guitar.getImage().isEmpty()){
+            fileStorageService.delete(guitar.getImage());
+        }
+
+        String image = fileStorageService.store(file);
+        guitar.setImage(image);
+        Guitar savedGuitar = guitarRepository.save(guitar);
+        return Result.success(guitarMapper.toDto(savedGuitar));
+    }
+
+    @Override
+    public Resource downloadImage(UUID id) {
+        Guitar guitar = guitarRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Guitar not found with id: " + id));
+
+        if(guitar.getImage() == null && guitar.getImage().isEmpty()){
+            throw new NotFoundException("Image not found for guitar with id: " + id);
+        }
+
+        return fileStorageService.download(guitar.getImage());
     }
 }

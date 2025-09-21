@@ -8,9 +8,13 @@ import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
 import com.panvdev.springapi.features.guitar.services.GuitarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -69,5 +73,18 @@ public class GuitarController {
     @GetMapping("byCategoryName")
     public ResponseEntity<Result<List<GuitarDto>>> findByCategoryId(@RequestParam String categoryName){
         return ResponseEntity.ok(guitarService.findByCategoryName(categoryName));
+    }
+
+    @PostMapping(value = "{id}/image/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Result<GuitarDto>> updateImage(@PathVariable UUID id, @RequestParam MultipartFile file){
+        return ResponseEntity.ok(guitarService.updateImage(id, file));
+    }
+
+    @GetMapping("{id}/image/download")
+    public ResponseEntity<Resource> downloadImage(@PathVariable UUID id){
+        Resource file = guitarService.downloadImage(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 }

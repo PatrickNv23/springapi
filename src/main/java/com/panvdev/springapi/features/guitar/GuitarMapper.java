@@ -1,6 +1,5 @@
-package com.panvdev.springapi.features.guitar.mappers;
+package com.panvdev.springapi.features.guitar;
 
-import com.panvdev.springapi.features.guitar.domains.Guitar;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
 import org.mapstruct.Mapper;
 

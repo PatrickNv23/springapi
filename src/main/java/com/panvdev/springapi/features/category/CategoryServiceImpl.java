@@ -1,10 +1,8 @@
-package com.panvdev.springapi.features.category.services;
+package com.panvdev.springapi.features.category;
 
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.features.category.dtos.CategoryDto;
-import com.panvdev.springapi.features.category.mappers.CategoryMapper;
-import com.panvdev.springapi.features.category.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,5 @@
-package com.panvdev.springapi.features.guitar.repositories;
+package com.panvdev.springapi.features.guitar;
 
-import com.panvdev.springapi.features.guitar.domains.Guitar;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

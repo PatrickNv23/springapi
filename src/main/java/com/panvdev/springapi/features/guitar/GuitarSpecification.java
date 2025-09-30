@@ -1,7 +1,6 @@
-package com.panvdev.springapi.features.guitar.specifications;
+package com.panvdev.springapi.features.guitar;
 
-import com.panvdev.springapi.features.guitar.domains.Guitar;
-import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
+import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersRequest;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuitarSpecification {
-    public static Specification<Guitar> withFilters(GuitarFiltersDto filters){
+    public static Specification<Guitar> withFilters(GuitarFiltersRequest filters){
         return (root, _, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 

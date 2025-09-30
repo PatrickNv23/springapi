@@ -1,6 +1,6 @@
-package com.panvdev.springapi.features.category.domains;
+package com.panvdev.springapi.features.category;
 
-import com.panvdev.springapi.features.guitar.domains.Guitar;
+import com.panvdev.springapi.features.guitar.Guitar;
 import jakarta.persistence.*;
 import lombok.*;
 

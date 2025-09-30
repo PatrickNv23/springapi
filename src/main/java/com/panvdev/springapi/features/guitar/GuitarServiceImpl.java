@@ -1,16 +1,12 @@
-package com.panvdev.springapi.features.guitar.services;
+package com.panvdev.springapi.features.guitar;
 
 import com.panvdev.springapi.core.dtos.PageableAndSortingRequest;
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.core.exceptions.NotFoundException;
 import com.panvdev.springapi.core.storage.FileStorageService;
-import com.panvdev.springapi.features.guitar.domains.Guitar;
-import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarDto;
+import com.panvdev.springapi.features.guitar.dtos.FilterByBrandAndModelGuitarRequest;
 import com.panvdev.springapi.features.guitar.dtos.GuitarDto;
-import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersDto;
-import com.panvdev.springapi.features.guitar.mappers.GuitarMapper;
-import com.panvdev.springapi.features.guitar.repositories.GuitarRepository;
-import com.panvdev.springapi.features.guitar.specifications.GuitarSpecification;
+import com.panvdev.springapi.features.guitar.dtos.GuitarFiltersRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -91,7 +87,7 @@ public class GuitarServiceImpl implements GuitarService {
     }
 
     @Override
-    public Result<List<GuitarDto>> findByBrandAndModel(FilterByBrandAndModelGuitarDto filters) {
+    public Result<List<GuitarDto>> findByBrandAndModel(FilterByBrandAndModelGuitarRequest filters) {
         return Result.success(
                 guitarRepository.findByBrandAndModel(filters.brand(), filters.model())
                         .stream()
@@ -101,7 +97,7 @@ public class GuitarServiceImpl implements GuitarService {
     }
 
     @Override
-    public Result<List<GuitarDto>> findByFilters(GuitarFiltersDto filters) {
+    public Result<List<GuitarDto>> findByFilters(GuitarFiltersRequest filters) {
         return Result.success(
                 guitarRepository.findAll(GuitarSpecification.withFilters(filters))
                         .stream()

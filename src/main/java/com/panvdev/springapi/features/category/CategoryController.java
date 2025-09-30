@@ -1,8 +1,7 @@
-package com.panvdev.springapi.features.category.controllers;
+package com.panvdev.springapi.features.category;
 
 import com.panvdev.springapi.core.error_handling.Result;
 import com.panvdev.springapi.features.category.dtos.CategoryDto;
-import com.panvdev.springapi.features.category.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
